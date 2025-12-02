@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --only-binary=:all: -r requirements.txt || pip install -r requirements.txt
 
 COPY main.py views.py blackjack.py roulette.py mines.py run_bot.py ./
 RUN mkdir -p qr_codes
