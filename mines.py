@@ -2,6 +2,8 @@ import random
 import discord
 import math
 
+DC_VALUE_USD = 1.00
+
 BOARD_SIZE = 25
 
 def get_payout_multiplier(mines_count, clicks_safe):
@@ -70,7 +72,7 @@ def get_mines_embed(user, game_state, bet_amount, net_change=None, final=False):
         
     embed = discord.Embed(
         title=title,
-        description=f"**Mines:** {game_state['mines_count']} | **Bet:** {bet_amount:.2f} DC [${bet_amount * 0.10:.2f}]",
+        description=f"**Mines:** {game_state['mines_count']} | **Bet:** {bet_amount:.2f} DC [${bet_amount * DC_VALUE_USD:.2f}]",
         color=color
     )
     
@@ -80,10 +82,10 @@ def get_mines_embed(user, game_state, bet_amount, net_change=None, final=False):
     if game_state["safe_clicks"] > 0:
         current_multiplier = get_payout_multiplier(game_state["mines_count"], game_state["safe_clicks"])
         payout = bet_amount * current_multiplier
-        embed.add_field(name="Current Payout", value=f"{payout:.2f} DC [${payout * 0.10:.2f}] ({current_multiplier:.2f}x)", inline=True)
+        embed.add_field(name="Current Payout", value=f"{payout:.2f} DC [${payout * DC_VALUE_USD:.2f}] ({current_multiplier:.2f}x)", inline=True)
         
     if final:
-        embed.add_field(name="Net Change", value=f"{net_change:+.2f} DC [${net_change * 0.10:+.2f}]", inline=True)
+        embed.add_field(name="Net Change", value=f"{net_change:+.2f} DC [${net_change * DC_VALUE_USD:+.2f}]", inline=True)
         embed.add_field(name="Next Nonce", value=game_state["nonce"] + 1, inline=True)
         embed.add_field(name="Provably Fair", value=f"Client Seed: `{game_state['client_seed']}`\nNonce: `{game_state['nonce']}`", inline=False)
         

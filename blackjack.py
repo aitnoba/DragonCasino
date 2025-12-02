@@ -1,6 +1,8 @@
 import random
 import discord
 
+DC_VALUE_USD = 1.00
+
 CARD_VALUES = {
     '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 
     '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11
@@ -176,7 +178,7 @@ class BlackjackGame:
 
         embed = discord.Embed(
             title="♠️ Dragon Blackjack ♣️",
-            description=f"**Bet:** {self.bet:.2f} DC [${self.bet * 0.10:.2f}]",
+            description=f"**Bet:** {self.bet:.2f} DC [${self.bet * DC_VALUE_USD:.2f}]",
             color=discord.Color.blue()
         )
         embed.set_author(name=ctx.display_name, icon_url=ctx.display_avatar.url)
@@ -188,7 +190,7 @@ class BlackjackGame:
             embed.set_footer(text="Type .hit or .stand to continue.")
         elif self.state == "ENDED":
             result = self.get_result()
-            embed.description += f"\n\n**{result['message']}**\nNet Change: {result['net_change']:+.2f} DC [${result['net_change'] * 0.10:+.2f}]"
+            embed.description += f"\n\n**{result['message']}**\nNet Change: {result['net_change']:+.2f} DC [${result['net_change'] * DC_VALUE_USD:+.2f}]"
             embed.color = discord.Color.green() if result['net_change'] > 0 else discord.Color.red()
             
         return embed

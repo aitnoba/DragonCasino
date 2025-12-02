@@ -1,6 +1,8 @@
 import random
 import discord
 
+DC_VALUE_USD = 1.00
+
 ROULETTE_NUMBERS = list(range(37))
 ROULETTE_COLORS = {
     0: "green",
@@ -95,12 +97,12 @@ def get_roulette_embed(ctx, spin_result, bet_amount, bet_type, net_change):
 
     embed = discord.Embed(
         title=title,
-        description=f"**Your Bet:** {bet_amount:.2f} DC [${bet_amount * 0.10:.2f}] on **{bet_type.upper()}**",
+        description=f"**Your Bet:** {bet_amount:.2f} DC [${bet_amount * DC_VALUE_USD:.2f}] on **{bet_type.upper()}**",
         color=color
     )
     
     embed.add_field(name="Result", value=f"{result_number} ({result_color})", inline=True)
-    embed.add_field(name="Net Change", value=f"{net_change:+.2f} DC [${net_change * 0.10:+.2f}]", inline=True)
+    embed.add_field(name="Net Change", value=f"{net_change:+.2f} DC [${net_change * DC_VALUE_USD:+.2f}]", inline=True)
     embed.add_field(name="Next Nonce", value=spin_result["nonce"] + 1, inline=True)
     embed.add_field(name="Provably Fair", value=f"Client Seed: `{spin_result['client_seed']}`\nNonce: `{spin_result['nonce']}`", inline=False)
     
