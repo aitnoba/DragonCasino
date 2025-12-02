@@ -7,21 +7,26 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Copy requirements and install dependencies FIRST
 COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy all bot files
+# Copy all bot source files
 COPY main.py .
 COPY views.py .
 COPY blackjack.py .
 COPY roulette.py .
 COPY mines.py .
 
-# Create data directory for database
-RUN mkdir -p /app/data /app/qr_codes
+# Create directories for runtime data
+RUN mkdir -p /app/qr_codes
 
-# Run the bot directly (no shell wrapper needed on Render)
-CMD ["python", "main.py"]
+# Set environment variables with defaults
+ENV PYTHONUNBUFFERED=1
+ENV DISCORD_BOT_TOKEN=""
+ENV BOT_WALLET_ADDRESS=""
+ENV SOLANA_RPC_URL="https://api.mainnet-beta.solana.com"
+
+# Start the bot
+CMD ["python", "-u", "main.py"]
