@@ -2,20 +2,26 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install dependencies
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
 COPY requirements.txt .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy bot files
+# Copy all bot files
 COPY main.py .
 COPY views.py .
 COPY blackjack.py .
 COPY roulette.py .
 COPY mines.py .
-COPY start_bot.sh .
 
-# Make script executable
-RUN chmod +x start_bot.sh
+# Create data directory for database
+RUN mkdir -p /app/data /app/qr_codes
 
-# Run the bot
-CMD ["bash", "start_bot.sh"]
+# Run the bot directly (no shell wrapper needed on Render)
+CMD ["python", "main.py"]
